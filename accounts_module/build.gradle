@@ -18,6 +18,22 @@ repositories {
 }
 
 dependencies {
+	implementation('org.springframework.boot:spring-boot-starter') {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
+	// Exclude log4j-to-slf4j to avoid conflicts
+	configurations.all {
+		exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
+		exclude group: 'ch.qos.logback', module: 'logback-classic'
+		exclude group: 'ch.qos.logback', module: 'logback-core'
+	}
+
+	// Use log4j-slf4j-impl for SLF4J binding
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.20.0'
+	implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+	implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
@@ -25,16 +41,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0' // Verify the version
-
-	//implementation 'org.spring doc-openapi-starter-webmvc-ui:2.1.0' // Use the correct, compatible version
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-
-
-
 }
-
 
 tasks.named('test') {
 	useJUnitPlatform()
